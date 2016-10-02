@@ -1,0 +1,11 @@
+{
+  "name": "gruber",
+  "version": "1.0.0",
+  "description": "Apply to become a Gruber Shopper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shehzad Daredia",
+  "license": "ISC"
+}

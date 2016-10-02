@@ -1,0 +1,11 @@
+# OS
+.DS_Store
+
+# Dependency directories
+node_modules/
+
+# Compiled
+client/bundle.js
+
+# Misc
+notes.txt
