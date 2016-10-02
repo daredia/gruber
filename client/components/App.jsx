@@ -2,6 +2,7 @@ import React from 'react';
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import Divider from 'material-ui/Divider';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 export default class App extends React.Component {
@@ -12,10 +13,6 @@ export default class App extends React.Component {
     };
   }
 
-  handleExpandChange(expanded) {
-    this.setState({expanded: expanded});
-  }
-
   handleExpand() {
     this.setState({expanded: true});
   }
@@ -23,22 +20,45 @@ export default class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider>
-        <Card className="modal center" expanded={this.state.expanded} onExpandChange={this.handleExpandChange.bind(this)}>
+        <Card className="modal center" expanded={this.state.expanded} >
           
           <CardTitle title="Apply now to become a Gruber Shopper!" />
           <CardText >
             Earn some extra dough by shopping for... dough... and other groceries. 
             Be a Shopper, Driver, or both, all on your own schedule. It's rewarding, easy, and most of all -- fun!
           </CardText>
-          
-          {/* TODO: REPLACE WITH FORM*/}
-          <CardTitle title="Card title" subtitle="Card subtitle" expandable={true} />
-          <CardText expandable={true}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-            Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-            Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+
+          <CardText expandable={true} >
+            <CardActions >
+              <TextField
+                hintText="John"
+                floatingLabelText="First name"
+              /> 
+              <TextField
+                hintText="Jones"
+                floatingLabelText="Last name"
+              />  <br />
+              <TextField
+                hintText="555-123-4567"
+                floatingLabelText="Cell phone number"
+              />
+              <TextField
+                hintText="90210"
+                floatingLabelText="Zip code"
+              />  <br />
+              <TextField
+                hintText="MM/DD/YYYY"
+                floatingLabelText="Date of birth"
+              /> 
+              <TextField
+                hintText="123-45-6789"
+                floatingLabelText="Social Security Number"
+              /> 
+            </CardActions>
           </CardText>
+
+          <Divider style={{marginTop: '30px'}} />
+
 
           <CardActions >
             <TextField
@@ -46,7 +66,7 @@ export default class App extends React.Component {
               floatingLabelText="Email"
             />
             <FlatButton 
-              label="Sign Up or Log In" 
+              label={this.state.expanded ? "Continue" : "Sign Up or Log In" }
               backgroundColor="#a4c639"
               hoverColor="#8AA62F"
               onTouchTap={this.handleExpand.bind(this)} 
