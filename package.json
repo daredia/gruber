@@ -2,10 +2,27 @@
   "name": "gruber",
   "version": "1.0.0",
   "description": "Apply to become a Gruber Shopper",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
+    "start": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shehzad Daredia",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babelify": "^7.3.0",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "flexboxgrid": "^6.3.1",
+    "morgan": "^1.7.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "nodemon": "^1.10.2"
+  }
 }
