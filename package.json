@@ -4,7 +4,7 @@
   "description": "Apply to become a Gruber Shopper",
   "main": "server/index.js",
   "scripts": {
-    "start": "nodemon server/index.js",
+    "start": "watchify -t [ babelify --presets [ es2015 react ] ] client/index.js -o client/bundle.js & live-server --open='/client' & nodemon --ignore 'client/*' server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shehzad Daredia",
