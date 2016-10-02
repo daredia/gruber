@@ -1,0 +1,19 @@
+html {
+  background: url("groceries.jpeg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.modal {
+  width: 50%;
+  margin: 100px auto;
+  overflow: auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.center {
+  text-align: center;
+}
