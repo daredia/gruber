@@ -3,18 +3,130 @@ import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
+import DatePicker from 'material-ui/DatePicker';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const errorStyle = {float: "left"};
+const emailErrorText = 'Invalid email address';
+const generalErrorText = 'This field is required';
+const phoneNumberErrorText = 'Invalid phone number';
+const zipErrorText = 'Invalid zip code';
+const ssnErrorText = 'Invalid SSN';
+const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+const phonePattern = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
+const zipPattern = /^\d{5}([\-]?\d{4})?$/;
+const ssnPattern = /(^\d{3}-?\d{2}-?\d{4}$|^XXX-XX-XXXX$)/;
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false
+      expanded: false,
+      email: null,
+      emailErrorText: null,
+      firstname: null,
+      firstnameErrorText: null,
+      lastname: null,
+      lastnameErrorText: null,
+      phoneNumber: null,
+      phoneNumberErrorText: null,
+      zipCode: null,
+      zipErrorText: null,
+      ssn: null,
+      ssnErrorText: null,
+      dob: null,
+      dobErrorText: null
     };
   }
 
   handleExpand() {
-    this.setState({expanded: true});
+    console.log('state:', this.state);
+    if (this.state.email) {
+      this.setState({expanded: true});  
+    } else {
+      this.setState({
+        emailErrorText: emailErrorText
+      });
+    }
+  }
+
+  validateEmail(event) {
+    if (!event.target.value || !emailPattern.test(event.target.value)) {
+      this.setState({
+        emailErrorText: emailErrorText
+      });
+    } else {
+      this.setState({
+        email: event.target.value.trim(),
+        emailErrorText: null
+      });
+    }
+  }
+
+  validateName(event) {
+    let errorText = event.target.name === 'firstname' ? 'firstnameErrorText' : 'lastnameErrorText';
+    if (!event.target.value.trim()) {
+      this.setState({
+        [errorText]: generalErrorText
+      });
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value.trim(),
+        [errorText]: null
+      });
+    }
+  }
+
+  validatePhoneNumber(event) {
+    if (!event.target.value || !phonePattern.test(event.target.value)) {
+      this.setState({
+        phoneNumberErrorText: phoneNumberErrorText
+      });
+    } else {
+      this.setState({
+        phoneNumber: event.target.value.trim(),
+        phoneNumberErrorText: null
+      });
+    }
+  }
+
+  validateZipCode(event) {
+    if (!event.target.value || !zipPattern.test(event.target.value)) {
+      this.setState({
+        zipErrorText: zipErrorText
+      });
+    } else {
+      this.setState({
+        zip: event.target.value.trim(),
+        zipErrorText: null
+      });
+    }
+  }
+
+  validateDOB(event, date) {
+    if (!date) {
+      this.setState({
+        dobErrorText: generalErrorText
+      });
+    } else {
+      this.setState({
+        dob: date,
+        dobErrorText: null
+      });
+    }
+  }
+
+  validateSSN(event) {
+    if (!event.target.value || !ssnPattern.test(event.target.value)) {
+      this.setState({
+        ssnErrorText: ssnErrorText
+      });
+    } else {
+      this.setState({
+        ssn: event.target.value.trim(),
+        ssnErrorText: null
+      });
+    }
   }
 
   render() {
@@ -33,26 +145,52 @@ export default class App extends React.Component {
               <TextField
                 hintText="John"
                 floatingLabelText="First name"
+                name="firstname"
+                errorText={this.state.firstnameErrorText}
+                errorStyle={errorStyle}
+                onBlur={this.validateName.bind(this)}
               /> 
               <TextField
                 hintText="Jones"
                 floatingLabelText="Last name"
+                name="lastname"
+                errorText={this.state.lastnameErrorText}
+                errorStyle={errorStyle}
+                onBlur={this.validateName.bind(this)}
               />  <br />
               <TextField
                 hintText="555-123-4567"
                 floatingLabelText="Cell phone number"
+                name="phoneNumber"
+                errorText={this.state.phoneNumberErrorText}
+                errorStyle={errorStyle}
+                onBlur={this.validatePhoneNumber.bind(this)}
               />
               <TextField
                 hintText="90210"
                 floatingLabelText="Zip code"
+                name="zipCode"
+                errorText={this.state.zipErrorText}
+                errorStyle={errorStyle}
+                onBlur={this.validateZipCode.bind(this)}
               />  <br />
-              <TextField
+              <DatePicker 
+                className="date-picker"
                 hintText="MM/DD/YYYY"
                 floatingLabelText="Date of birth"
-              /> 
+                autoOk={true}
+                name="dob"
+                errorText={this.state.dobErrorText}
+                errorStyle={errorStyle}
+                onChange={this.validateDOB.bind(this)}
+              />
               <TextField
                 hintText="123-45-6789"
                 floatingLabelText="Social Security Number"
+                name="ssn"
+                errorText={this.state.ssnErrorText}
+                errorStyle={errorStyle}
+                onBlur={this.validateSSN.bind(this)}
               /> 
             </CardActions>
           </CardText>
@@ -64,6 +202,9 @@ export default class App extends React.Component {
             <TextField
               hintText="Email address"
               floatingLabelText="Email"
+              errorText={this.state.emailErrorText}
+              errorStyle={errorStyle}
+              onBlur={this.validateEmail.bind(this)}
             />
             <FlatButton 
               label={this.state.expanded ? "Continue" : "Sign Up or Log In" }

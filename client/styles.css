@@ -17,3 +17,7 @@ html {
 .center {
   text-align: center;
 }
+
+.date-picker {
+  display: inline-block;
+}
