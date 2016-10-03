@@ -4,8 +4,13 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import DatePicker from 'material-ui/DatePicker';
+import Checkbox from 'material-ui/Checkbox';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+const startTitle = "Apply now to become a Gruber Shopper!";
+const startCopy = "Earn some extra dough by shopping for... dough... and other groceries. Be a Shopper, Driver, or both, all on your own schedule. It's rewarding, easy, and most of all -- fun!";
+const doneTitle = "Your application has been received!";
+const doneCopy = "Check your email for next steps, including a link to download our InstaShopper app.";
 const errorStyle = {float: "left"};
 const emailErrorText = 'Invalid email address';
 const generalErrorText = 'This field is required';
@@ -17,37 +22,63 @@ const phonePattern = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02
 const zipPattern = /^\d{5}([\-]?\d{4})?$/;
 const ssnPattern = /(^\d{3}-?\d{2}-?\d{4}$|^XXX-XX-XXXX$)/;
 
+let initialState = {
+  title: startTitle,
+  copy: startCopy,
+  expanded: false,
+  email: null,
+  emailErrorText: null,
+  firstname: null,
+  firstnameErrorText: null,
+  lastname: null,
+  lastnameErrorText: null,
+  phoneNumber: null,
+  phoneNumberErrorText: null,
+  zipCode: null,
+  zipErrorText: null,
+  ssn: null,
+  ssnErrorText: null,
+  dob: null,
+  dobErrorText: null,
+  allowBgCheck: false,
+  done: false
+};
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      expanded: false,
-      email: null,
-      emailErrorText: null,
-      firstname: null,
-      firstnameErrorText: null,
-      lastname: null,
-      lastnameErrorText: null,
-      phoneNumber: null,
-      phoneNumberErrorText: null,
-      zipCode: null,
-      zipErrorText: null,
-      ssn: null,
-      ssnErrorText: null,
-      dob: null,
-      dobErrorText: null
-    };
+    this.state = initialState;
   }
 
-  handleExpand() {
+  handleClick() {
     console.log('state:', this.state);
-    if (this.state.email) {
-      this.setState({expanded: true});  
+    let nextState;
+
+    if (!this.state.expanded) {
+      nextState = initialState;
+      nextState.email = this.state.email;
+      if (this.state.email && emailPattern.test(this.state.email)) {
+        nextState.expanded = true;
+        nextState.emailErrorText = null;
+      } else {
+        nextState.emailErrorText = emailErrorText;
+      }  
+    } else if (this.state.firstname && this.state.lastname && 
+               this.state.phoneNumber && this.state.zipCode &&
+               this.state.dob && this.state.ssn && 
+               this.state.allowBgCheck && this.state.email) {
+      nextState = {
+        expanded: false,
+        title: doneTitle,
+        copy: doneCopy,
+        emailErrorText: null,
+        done: true
+      };
     } else {
-      this.setState({
-        emailErrorText: emailErrorText
-      });
-    }
+      nextState = {emailErrorText: "Please complete all fields before submitting"}
+    } 
+
+    this.setState(nextState);
   }
 
   validateEmail(event) {
@@ -97,7 +128,7 @@ export default class App extends React.Component {
       });
     } else {
       this.setState({
-        zip: event.target.value.trim(),
+        zipCode: event.target.value.trim(),
         zipErrorText: null
       });
     }
@@ -129,15 +160,18 @@ export default class App extends React.Component {
     }
   }
 
+  handleCheck(event, isInputChecked) {
+    this.setState({allowBgCheck: isInputChecked});
+  }
+
   render() {
     return (
       <MuiThemeProvider>
         <Card className="modal center" expanded={this.state.expanded} >
           
-          <CardTitle title="Apply now to become a Gruber Shopper!" />
+          <CardTitle title={this.state.title} />
           <CardText >
-            Earn some extra dough by shopping for... dough... and other groceries. 
-            Be a Shopper, Driver, or both, all on your own schedule. It's rewarding, easy, and most of all -- fun!
+            {this.state.copy}
           </CardText>
 
           <CardText expandable={true} >
@@ -191,28 +225,35 @@ export default class App extends React.Component {
                 errorText={this.state.ssnErrorText}
                 errorStyle={errorStyle}
                 onBlur={this.validateSSN.bind(this)}
-              /> 
+              /> <br />
+              <Checkbox
+                className="bg-check"
+                label="I allow Instacart to run a background check from a consumer reporting agency in connection with my application"
+                onCheck={this.handleCheck.bind(this)}
+              />
             </CardActions>
           </CardText>
 
           <Divider style={{marginTop: '30px'}} />
 
 
-          <CardActions >
-            <TextField
-              hintText="Email address"
-              floatingLabelText="Email"
-              errorText={this.state.emailErrorText}
-              errorStyle={errorStyle}
-              onBlur={this.validateEmail.bind(this)}
-            />
-            <FlatButton 
-              label={this.state.expanded ? "Continue" : "Sign Up or Log In" }
-              backgroundColor="#a4c639"
-              hoverColor="#8AA62F"
-              onTouchTap={this.handleExpand.bind(this)} 
-            />
-          </CardActions>
+          { !this.state.done ?
+            <CardActions >
+              <TextField
+                hintText="Email address"
+                floatingLabelText="Email"
+                errorText={this.state.emailErrorText}
+                errorStyle={errorStyle}
+                onBlur={this.validateEmail.bind(this)}
+              />
+              <FlatButton 
+                label={this.state.expanded ? "Submit" : "Sign Up or Log In" }
+                backgroundColor="#a4c639"
+                hoverColor="#8AA62F"
+                onTouchTap={this.handleClick.bind(this)} 
+              />
+            </CardActions> : null 
+          }
 
         </Card>
       </MuiThemeProvider>
