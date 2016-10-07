@@ -16,12 +16,12 @@ var db = {
 
 db.Applicant = db.sequelize.define('Applicant', {
   email: { type: Sequelize.STRING, allowNull: false },
-  firstname: { type: Sequelize.STRING, allowNull: false },
-  lastname: { type: Sequelize.STRING, allowNull: false },
-  phoneNumber: { type: Sequelize.STRING, allowNull: false },
-  zipCode: { type: Sequelize.STRING, allowNull: false },
-  dob: { type: Sequelize.STRING, allowNull: false },
-  ssn: { type: Sequelize.STRING, allowNull: false }
+  firstname: { type: Sequelize.STRING, allowNull: true },
+  lastname: { type: Sequelize.STRING, allowNull: true },
+  phoneNumber: { type: Sequelize.STRING, allowNull: true },
+  zipCode: { type: Sequelize.STRING, allowNull: true },
+  dob: { type: Sequelize.STRING, allowNull: true },
+  ssn: { type: Sequelize.STRING, allowNull: true }
 });
 
 module.exports = db;

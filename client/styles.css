@@ -6,6 +6,16 @@ html {
   background-size: cover;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.3);
+  z-index: -1;
+}
+
 .modal {
   width: 50%;
   margin: 100px auto;
@@ -26,4 +36,8 @@ html {
   padding-top: 25px;
   padding-left: 5px;
   text-align: left;
+}
+
+.button {
+  width: 166px;
 }
