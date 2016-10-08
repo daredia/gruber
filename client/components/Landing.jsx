@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Import material UI components
+import {CardTitle, CardText} from 'material-ui/Card';
+
 export default class Landing extends React.Component {
   render() {
     return ( 

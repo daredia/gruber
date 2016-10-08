@@ -1,16 +1,15 @@
 import React from 'react';
 import axios from 'axios';
+import Landing from './Landing.jsx';
+import Form from './Form.jsx';
+import CTA from './CTA.jsx';
 
 // Import material UI components
-import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
+import {Card, CardText} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
-import DatePicker from 'material-ui/DatePicker';
-import Checkbox from 'material-ui/Checkbox';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-// Assign copy, error messages, and validation regex rules
+// Define copy, error messages, and validation regex rules
 const startTitle = "Apply now to become a Gruber Shopper!";
 const startCopy = "Earn some extra dough by shopping for... dough... and other groceries. Be a Shopper, Driver, or both, all on your own schedule. It's rewarding, easy, and most of all -- fun!";
 const doneTitle = "Your application has been received!";
@@ -79,6 +78,7 @@ export default class App extends React.Component {
             nextState.dob = res.data.dob;
             nextState.ssn = res.data.ssn;
             nextState.allowBgCheck = true;
+            nextState.applicationDate = res.data.applicationDate;
           }
           this.setState(nextState);
         });
@@ -89,6 +89,12 @@ export default class App extends React.Component {
                this.state.phoneNumber && this.state.zipCode &&
                this.state.dob && this.state.ssn && 
                this.state.allowBgCheck && this.state.email) {
+      let currentDate = new Date();
+      let day = currentDate.getDate();
+      let month = currentDate.getMonth() + 1;
+      let year = currentDate.getFullYear();
+      let dateonly = year + '/' + month + '/' + day;
+
       // Post form to db and then update state
       let body = {
         firstname: this.state.firstname, 
@@ -97,7 +103,9 @@ export default class App extends React.Component {
         zipCode: this.state.zipCode,
         dob: this.state.dob, 
         ssn: this.state.ssn, 
-        email: this.state.email
+        email: this.state.email,
+        workflow_state: 'applied',
+        applicationDate: this.state.applicationDate || dateonly
       };
 
       this.setState({buttonText: 'Loading...'});
@@ -213,101 +221,44 @@ export default class App extends React.Component {
     return (
       <MuiThemeProvider>
         <Card className="modal center" expanded={this.state.expanded} >
-          
-          <CardTitle title={this.state.title} />
-          <CardText >
-            {this.state.copy}
-          </CardText>
-
+          <Landing title={this.state.title} copy={this.state.copy}/>
           <CardText expandable={true} >
-            <CardActions >
-              <TextField
-                hintText="John"
-                floatingLabelText="First name"
-                name="firstname"
-                errorText={this.state.firstnameErrorText}
-                errorStyle={errorStyle}
-                onBlur={this.validateName.bind(this)}
-                defaultValue={this.state.firstname}
-              /> 
-              <TextField
-                hintText="Jones"
-                floatingLabelText="Last name"
-                name="lastname"
-                errorText={this.state.lastnameErrorText}
-                errorStyle={errorStyle}
-                onBlur={this.validateName.bind(this)}
-                defaultValue={this.state.lastname}
-              />  <br />
-              <TextField
-                hintText="555-123-4567"
-                floatingLabelText="Cell phone number"
-                name="phoneNumber"
-                errorText={this.state.phoneNumberErrorText}
-                errorStyle={errorStyle}
-                onBlur={this.validatePhoneNumber.bind(this)}
-                defaultValue={this.state.phoneNumber}
-              />
-              <TextField
-                hintText="90210"
-                floatingLabelText="Zip code"
-                name="zipCode"
-                errorText={this.state.zipErrorText}
-                errorStyle={errorStyle}
-                onBlur={this.validateZipCode.bind(this)}
-                defaultValue={this.state.zipCode}
-              />  <br />
-              <DatePicker 
-                className="date-picker"
-                hintText="MM/DD/YYYY"
-                floatingLabelText="Date of birth"
-                autoOk={true}
-                name="dob"
-                errorText={this.state.dobErrorText}
-                errorStyle={errorStyle}
-                onChange={this.validateDOB.bind(this)}
-                defaultDate={this.state.dob ? new Date(Date.parse(this.state.dob)) : undefined}
-              />
-              <TextField
-                hintText="123-45-6789"
-                floatingLabelText="Social Security Number"
-                name="ssn"
-                errorText={this.state.ssnErrorText}
-                errorStyle={errorStyle}
-                onBlur={this.validateSSN.bind(this)}
-                defaultValue={this.state.ssn}
-              /> <br />
-              <Checkbox
-                className="bg-check"
-                label="I allow Instacart to run a background check from a consumer reporting agency in connection with my application"
-                onCheck={this.handleCheck.bind(this)}
-                defaultChecked={this.state.allowBgCheck}
-              />
-            </CardActions>
+            <Form 
+              errorStyle={errorStyle}
+              firstnameErrorText={this.state.firstnameErrorText}
+              lastnameErrorText={this.state.lastnameErrorText}
+              phoneNumberErrorText={this.state.phoneNumberErrorText}
+              zipErrorText={this.state.zipErrorText}
+              dobErrorText={this.state.dobErrorText}
+              ssnErrorText={this.state.ssnErrorText}
+              
+              validateName={this.validateName.bind(this)}
+              validatePhoneNumber={this.validatePhoneNumber.bind(this)}
+              validateZipCode={this.validateZipCode.bind(this)}
+              validateDOB={this.validateDOB.bind(this)}
+              validateSSN={this.validateSSN.bind(this)}
+              handleCheck={this.handleCheck.bind(this)}
+              
+              firstname={this.state.firstname}
+              lastname={this.state.lastname}
+              phoneNumber={this.state.phoneNumber}
+              zipCode={this.state.zipCode}
+              dob={this.state.dob}
+              ssn={this.state.ssn}
+              allowBgCheck={this.state.allowBgCheck}
+            />
           </CardText>
 
           <Divider style={{marginTop: '30px'}} />
 
-
-          { !this.state.done ?
-            <CardActions >
-              <TextField
-                hintText="Email address"
-                floatingLabelText="Email"
-                errorText={this.state.emailErrorText}
-                errorStyle={errorStyle}
-                onBlur={this.validateEmail.bind(this)}
-              />
-              <FlatButton 
-                className="button"
-                disabled={this.state.buttonText === 'Loading...'}
-                label={this.state.buttonText}
-                backgroundColor="#a4c639"
-                hoverColor="#8AA62F"
-                onTouchTap={this.handleClick.bind(this)}
-              />
-            </CardActions> : null 
-          }
+          { !this.state.done ? 
+            <CTA
+              errorStyle={errorStyle}
+              emailErrorText={this.state.emailErrorText}
+              validateEmail={this.validateEmail.bind(this)}
+              buttonText={this.state.buttonText}
+              handleClick={this.handleClick.bind(this)}
+            /> : null }
 
         </Card>
       </MuiThemeProvider>
