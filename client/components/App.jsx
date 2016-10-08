@@ -64,7 +64,7 @@ export default class App extends React.Component {
       if (this.state.email && emailPattern.test(this.state.email)) {
         this.setState({buttonText: 'Loading...'});
         // Post email address to db
-        return axios.post('http://localhost:4568/api/applicants', {email: this.state.email})
+        return axios.post('/api/applicants', {email: this.state.email})
         .then((res) => {
           nextState.expanded = true;
           nextState.emailErrorText = null;  
@@ -110,7 +110,7 @@ export default class App extends React.Component {
 
       this.setState({buttonText: 'Loading...'});
 
-      return axios.post('http://localhost:4568/api/applicants', body)
+      return axios.post('/api/applicants', body)
       .then((res) => {
         nextState = {
           expanded: false,

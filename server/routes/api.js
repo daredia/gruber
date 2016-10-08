@@ -23,4 +23,13 @@ router.post('/applicants', function(req, res) {
   });
 });
 
+router.get('/funnels.json', function(req, res) {
+  utils.queryFunnel(req.query, function(err, results) {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.status(200).json(results);
+  });
+});
+
 module.exports = router;

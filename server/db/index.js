@@ -20,8 +20,10 @@ db.Applicant = db.sequelize.define('Applicant', {
   lastname: { type: Sequelize.STRING, allowNull: true },
   phoneNumber: { type: Sequelize.STRING, allowNull: true },
   zipCode: { type: Sequelize.STRING, allowNull: true },
-  dob: { type: Sequelize.STRING, allowNull: true },
-  ssn: { type: Sequelize.STRING, allowNull: true }
+  dob: { type: Sequelize.DATEONLY, allowNull: true },
+  ssn: { type: Sequelize.STRING, allowNull: true },
+  workflow_state: { type: Sequelize.STRING, allowNull: true },
+  applicationDate: { type: Sequelize.DATEONLY, allowNull: true}
 });
 
 module.exports = db;
