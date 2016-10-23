@@ -11,7 +11,9 @@ npm start
 
 There is no need to spin up a local database, as this app currently points to a PostgreSQL db deployed on Heroku. The database is already populated with some sample data. 
 
-Visit localhost on port 4568 to view the [Shopper Application landing page](http://localhost:4568/). The Applicant Analysis endpoint can be accessed at a link like [this one](http://localhost:4568/api/funnels.json?start_date=2014-01-01&end_date=2016-12-10)
+Visit localhost on port 4568 to view the [Shopper Application landing page](http://localhost:4568/). Note that, upon submitting an application, you will not actually receive an email. 
+
+The Applicant Analysis endpoint can be accessed at a link like [this one](http://localhost:4568/api/funnels.json?start_date=2014-01-01&end_date=2016-12-10)
 
 ## Going Forward
 
